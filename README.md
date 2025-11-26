@@ -1,1 +1,1 @@
-# American Trail
+# The American Trail – Full Game

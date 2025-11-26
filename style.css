@@ -1,1 +1,19 @@
-body{font-family:Arial;} #travelBar{width:100%;height:10px;background:#ccc;} #travelDot{width:20px;height:10px;background:#2a6;}
+body { background:#f4f4f4; font-family:Arial; padding:20px; }
+#game { max-width:600px; margin:auto; background:white; padding:20px; border-radius:8px; }
+button { padding:10px; margin:5px 0; cursor:pointer; transition:transform .15s, background-color .2s; }
+button:hover { transform:scale(1.04); background-color:#e6e6e6; }
+.fade-in { animation:fadeIn .4s ease-in; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+#travelBar { width:100%; background:#ccc; height:10px; border-radius:5px; margin-top:20px; overflow:hidden; }
+#travelDot { width:20px; height:10px; background:#2a6; border-radius:3px; transform:translateX(0); transition:transform .5s ease; }
+
+#factionBox { text-align:center; margin-top:20px; opacity:0; transition:opacity .4s; }
+#factionBox img { width:120px; height:120px; border-radius:8px; object-fit:cover; border:2px solid #444; }
+
+#titleScreen { position:fixed; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg,#1a73e8,#e91e63);
+display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-size:2rem; z-index:999; opacity:1; transition:opacity .7s; }
+
+#miniGameModal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);
+display:none; justify-content:center; align-items:center; z-index:1000; }
+#miniGameContent { background:white; width:400px; padding:20px; border-radius:8px; text-align:center; }
