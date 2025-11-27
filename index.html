@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>The American Trail</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>The American Trail</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div id="titleScreen">
-    <h1>The American Trail</h1>
-    <button id="startGameBtn">Start</button>
+  <h1>The American Trail</h1>
+  <button id="startGameBtn">Start</button>
 </div>
 
 <div id="game">
-    <h1>The American Trail</h1>
-    <div id="stats"></div>
-    <div id="event"></div>
-    <div id="choices"></div>
-    <button id="nextBtn" style="display:none;">Next</button>
+  <svg id="usMap" viewBox="0 0 800 400">
+    <image href="img/usa_silhouette.png" x="0" y="0" width="800" height="400" opacity="0.15"/>
+    <path d="M50,200 L250,160 L450,150 L650,180 L750,200" stroke="#444" stroke-width="4" fill="none"/>
+    <circle cx="50" cy="200" r="12" class="node" id="n0"/>
+    <circle cx="250" cy="160" r="12" class="node" id="n1"/>
+    <circle cx="450" cy="150" r="12" class="node" id="n2"/>
+    <circle cx="650" cy="180" r="12" class="node" id="n3"/>
+    <circle cx="750" cy="200" r="12" class="node" id="n4"/>
+    <circle cx="50" cy="200" r="9" id="travelDot" fill="#2a6"></circle>
+  </svg>
 
-    <div id="travelBar"><div id="travelDot"></div></div>
-
-    <div id="factionBox">
-        <img id="factionPortrait" src="" alt="Faction">
-        <p id="factionName"></p>
-    </div>
+  <div id="stats"></div>
+  <div id="event"></div>
+  <div id="choices"></div>
+  <button id="nextBtn" style="display:none;">Next Turn</button>
 </div>
 
-<div id="miniGameModal">
-    <div id="miniGameContent">
-        <h2 id="miniGameTitle"></h2>
-        <div id="miniGameArea"></div>
-        <button id="miniGameCloseBtn">Close</button>
-    </div>
+<div id="gameOver" class="hidden">
+  <h2 id="endTitle"></h2>
+  <p id="endText"></p>
 </div>
 
 <script src="game.js"></script>

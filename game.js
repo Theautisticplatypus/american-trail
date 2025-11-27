@@ -1,71 +1,90 @@
-// Simplified full game engine core (fits packaging)
-let game={day:1,cash:5000,inventory:100,sentiment:50,regulation:20};
-let travelProgress=0;
+let game={day:1,cash:5000,inventory:100,sentiment:50,reg:20};
+let pos=0;
+let maxPos=4;
 
-function playSound(id){}
+const nodes=[{x:50,y:200},{x:250,y:160},{x:450,y:150},{x:650,y:180},{x:750,y:200}];
 
 function updateStats(){
-    const stats=document.getElementById("stats");
-    stats.innerHTML=`<p>Day: ${game.day}</p><p>Cash: $${game.cash}</p><p>Inventory: ${game.inventory}</p><p>Sentiment: ${game.sentiment}</p><p>Reg Risk: ${game.regulation}</p>`;
-    stats.classList.add("fade-in");
-    setTimeout(()=>stats.classList.remove("fade-in"),400);
+  document.getElementById('stats').innerHTML=
+  `Day: ${game.day}<br>Cash: $${game.cash}<br>Inventory: ${game.inventory}<br>
+   Sentiment: ${game.sentiment}<br>Regulation: ${game.reg}`;
 }
 
-const factions={business:{name:"Business Lobby",img:"img/faction_business.png"},
-consumer:{name:"Consumer Coalition",img:"img/faction_consumer.png"},
-regulator:{name:"Regulatory Council",img:"img/faction_regulator.png"}};
-
 function randomEvent(){
-    return {text:"Tariff Change",choices:[
-        {text:"Absorb cost",effect:()=>game.cash-=300},
-        {text:"Raise prices",effect:()=>game.sentiment-=5}
-    ]};
+  const events=[
+    {text:"Tariff Increase!",choices:[
+      {text:"Absorb cost",effect:()=>game.cash-=300},
+      {text:"Raise prices",effect:()=>game.sentiment-=8}
+    ]},
+    {text:"Supply Chain Delay!",choices:[
+      {text:"Buy domestic",effect:()=>{game.cash-=400; game.inventory+=10}},
+      {text:"Wait it out",effect:()=>game.inventory-=15}
+    ]},
+    {text:"New Regulation!",choices:[
+      {text:"Hire consultant",effect:()=>game.cash-=600},
+      {text:"Ignore it",effect:()=>game.reg+=12}
+    ]},
+    {text:"Public Protest!",choices:[
+      {text:"Close for day",effect:()=>game.cash-=200},
+      {text:"Continue operating",effect:()=>game.sentiment-=10}
+    ]}
+  ];
+  return events[Math.floor(Math.random()*events.length)];
 }
 
 function playTurn(){
-    updateStats();
-    const f=Object.values(factions)[Math.floor(Math.random()*3)];
-    document.getElementById("factionPortrait").src=f.img;
-    document.getElementById("factionName").innerText=f.name;
-    document.getElementById("factionBox").style.opacity=1;
-    setTimeout(()=>document.getElementById("factionBox").style.opacity=0,1400);
-
-    const ev=randomEvent();
-    const eDiv=document.getElementById("event");
-    eDiv.innerHTML=`<p>${ev.text}</p>`;
-    eDiv.classList.add("fade-in");
-    setTimeout(()=>eDiv.classList.remove("fade-in"),400);
-
-    const cDiv=document.getElementById("choices");
-    cDiv.innerHTML="";
-    ev.choices.forEach(ch=>{
-        const b=document.createElement("button");
-        b.textContent=ch.text;
-        b.onclick=()=>{ch.effect();endTurn();};
-        cDiv.appendChild(b);
-    });
+  updateStats();
+  let ev=randomEvent();
+  document.getElementById('event').innerHTML=ev.text;
+  let c=document.getElementById('choices');
+  c.innerHTML="";
+  ev.choices.forEach(ch=>{
+    let b=document.createElement('button');
+    b.textContent=ch.text;
+    b.onclick=()=>{ch.effect(); endTurn();};
+    c.appendChild(b);
+  });
 }
 
 function endTurn(){
-    document.getElementById("choices").innerHTML="";
-    document.getElementById("event").innerHTML="<p>Decision applied.</p>";
-    document.getElementById("nextBtn").style.display="block";
+  document.getElementById('choices').innerHTML="";
+  document.getElementById('event').innerHTML="Decision Applied.";
+  document.getElementById('nextBtn').style.display="inline-block";
 }
 
-document.getElementById("nextBtn").onclick=()=>{
-    document.getElementById("nextBtn").style.display="none";
-    travelProgress+=30;
-    document.getElementById("travelDot").style.transform=`translateX(${travelProgress}px)`;
-    game.day++;
-    playTurn();
+document.getElementById('nextBtn').onclick=()=>{
+  document.getElementById('nextBtn').style.display="none";
+  game.day++;
+  pos++;
+  if(pos>maxPos){ endGame("Victory!","You reached Election Day!"); return;}
+  moveDot();
+  checkFail();
+  playTurn();
 };
 
-document.getElementById("startGameBtn").onclick=()=>{
-    const t=document.getElementById("titleScreen");
-    t.style.opacity=0;
-    setTimeout(()=>t.style.display="none",700);
+function moveDot(){
+  let dot=document.getElementById('travelDot');
+  dot.setAttribute('cx', nodes[pos].x);
+  dot.setAttribute('cy', nodes[pos].y);
+  document.querySelectorAll('.node').forEach((n,i)=>n.classList.toggle('active',i===pos));
+}
+
+function checkFail(){
+  if(game.cash<=0) endGame("Bankrupt","Cash exhausted.");
+  if(game.sentiment<=0) endGame("Public Revolt","Support collapsed.");
+  if(game.reg>=100) endGame("Shutdown","Regulatory burden destroyed operations.");
+  if(game.inventory<=0) endGame("Collapse","No inventory left.");
+}
+
+function endGame(title,text){
+ document.getElementById('game').style.display='none';
+ let g=document.getElementById('gameOver');
+ g.classList.remove('hidden');
+ document.getElementById('endTitle').innerText=title;
+ document.getElementById('endText').innerText=text;
+}
+
+document.getElementById('startGameBtn').onclick=()=>{
+ document.getElementById('titleScreen').style.display='none';
+ playTurn();
 };
-
-document.getElementById("miniGameCloseBtn").onclick=()=>{document.getElementById("miniGameModal").style.display="none";};
-
-playTurn();
