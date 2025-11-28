@@ -1,11 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>The American Trail</title>
-<link rel="stylesheet" href="style.css">
-</head>
 <body>
+    <div id="titleScreen">
+        <h1>The American Trail</h1>
+        <p>A Political Journey Through a Modern Frontier</p>
+        <button id="startGameBtn" class="btn retro-btn">Begin Your Journey</button>
+    </div>
+
+    <div id="gameContainer" class="hidden">
+        <!-- game content -->
+    </div>
+
+    <div id="gameOverScreen" class="hidden">
+        <h2 id="endTitle"></h2>
+        <p id="endMessage"></p>
+        <button id="restartBtn" class="btn retro-btn">Play Again</button>
+    </div>
+</body>
 
 <!-- TITLE SCREEN -->
 <div id="titleScreen">
